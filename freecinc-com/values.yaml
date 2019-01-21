@@ -5,5 +5,5 @@ webImage:
 
 taskdImage:
   repository: djmitche/freecinc-taskd
-  tag: ac913ad
+  tag: 9f05c1b
   pullPolicy: IfNotPresent
