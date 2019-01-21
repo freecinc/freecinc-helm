@@ -13,6 +13,11 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+  # Because the pods share a volume and that volume can only be mounted
+  # on a single node, it is not possible to do a rolling update if the
+  # new revision is scheduled on a different node.  So we recreate..
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -52,7 +57,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-secrets
                   key: salt
-            - name: HOSTNAME
+            - name: PUBLIC_HOSTNAME
               value: {{ required "hostname value must be given" .Values.hostname }}
           ports:
             - name: http
