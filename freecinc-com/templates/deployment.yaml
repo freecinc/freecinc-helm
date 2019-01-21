@@ -64,3 +64,30 @@ spec:
             httpGet:
               path: /
               port: http
+        - name: freecinc-taskd
+          image: "{{ .Values.taskdImage.repository }}:{{ .Values.taskdImage.tag }}"
+          imagePullPolicy: {{ .Values.taskdImage.pullPolicy }}
+          volumeMounts:
+            - name: taskddata
+              mountPath: "/taskddata"
+            - name: secrets
+              mountPath: "/secrets"
+          env:
+            - name: TASKDDATA
+              value: "/taskddata"
+            - name: SECRETS_DIR
+              value: "/secrets"
+          ports:
+            - name: taskd
+              containerPort: 53589
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: taskd
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: taskd
+            initialDelaySeconds: 2
+            periodSeconds: 1

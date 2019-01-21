@@ -2,3 +2,8 @@ webImage:
   repository: djmitche/freecinc-web
   tag: 8f8b2ab
   pullPolicy: IfNotPresent
+
+taskdImage:
+  repository: djmitche/freecinc-taskd
+  tag: ac913ad
+  pullPolicy: IfNotPresent

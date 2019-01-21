@@ -68,6 +68,10 @@ Delete those manually in the "Storage" tab in GKE or via `kubectl`.
 
 ## Operation
 
-This runs a single deployment containing a pod with two images: one to run taskd and one for the [web frontend](https://github.com/freecinc/freecinc-web).
-Both containers mount two persistent volumes: `pki` contains the generated client certs and keys, while `taskddata` contains the taskd database.
+This runs a single deployment containing a pod with two containers: one to run [freecinc-taskd](https://github.com/freecinc/freecinc-taskd) and one for the [web frontend](https://github.com/freecinc/freecinc-web).
+
+The containers use two persistent volumes:
+ * `pki` contains the generated client certs and keys, and is only used by freecinc-web.
+ * `taskddata` contains the taskd database, and is accessed by both containers.
+
 Both containers are also provided with the secrets defined above.

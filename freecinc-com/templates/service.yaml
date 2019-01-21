@@ -10,10 +10,14 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: http
+    - name: http
+      port: 80
+      targetPort: 80
       protocol: TCP
-      name: http
+    - name: taskd
+      port: 53589
+      targetPort: 53589
+      protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
