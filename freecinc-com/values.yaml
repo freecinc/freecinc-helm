@@ -1,4 +1,4 @@
 webImage:
   repository: djmitche/freecinc-web
-  tag: f7dab3f
+  tag: b7bbe10
   pullPolicy: IfNotPresent

@@ -19,10 +19,39 @@ spec:
         app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      volumes:
+        - name: taskddata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-taskddata
+        - name: pki
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pki
+        - name: secrets
+          secret:
+            secretName: {{ .Release.Name }}-secrets
       containers:
         - name: freecinc-web
           image: "{{ .Values.webImage.repository }}:{{ .Values.webImage.tag }}"
           imagePullPolicy: {{ .Values.webImage.pullPolicy }}
+          volumeMounts:
+            - name: taskddata
+              mountPath: "/taskddata"
+            - name: pki
+              mountPath: "/pki"
+            - name: secrets
+              mountPath: "/secrets"
+          env:
+            - name: TASKDDATA
+              value: "/taskddata"
+            - name: PKI_DIR
+              value: "/pki"
+            - name: SECRETS_DIR
+              value: "/secrets"
+            - name: SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: salt
           ports:
             - name: http
               containerPort: 80
