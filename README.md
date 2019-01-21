@@ -13,6 +13,9 @@ A [Helm](https://helm.sh/) chart for deploying the FreeCinc service.
 The Helm run will create a "release" from the `./freecinc-com` chart.
 Choose an appropriate name for the release (e.g., `staging`), called RELEASE here.
 
+You'll also need to supply the hostname for the service (HOSTNAME).
+In order to get a TLS secret, it is up to you to configure DNS to map this hostname to the load balancer's public IP.
+
 ### Secrets
 
 In a working copy of this repository, with Kubernetes set up, first create the required secrets.
@@ -48,7 +51,7 @@ The Helm chart will refer to this secret, but not modify it.
 To create the release:
 
 ```shell
-$ helm install --name RELEASE ./freecinc-com
+$ helm install --set hostname=HOSTNAME --name RELEASE ./freecinc-com
 ```
 
 To later upgrade it:
