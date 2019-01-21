@@ -1,6 +1,6 @@
 webImage:
   repository: djmitche/freecinc-web
-  tag: 915c8a5
+  tag: 4438e84
   pullPolicy: IfNotPresent
 
 taskdImage:
