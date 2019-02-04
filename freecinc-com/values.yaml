@@ -8,7 +8,7 @@ taskdImage:
   tag: 9f05c1b
   pullPolicy: IfNotPresent
 
-ingress-controller:
+nginx-ingress:
   rbac:
     create: true
   serviceAccount:
