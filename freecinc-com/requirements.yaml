@@ -1,0 +1,5 @@
+dependencies:
+- name: nginx-ingress
+  version: 0.22.1
+  repository: https://kubernetes-charts.storage.googleapis.com
+  alias: ingress-controller
