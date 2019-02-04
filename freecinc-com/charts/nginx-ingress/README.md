@@ -1,3 +1,11 @@
+# LOCAL CHANGES
+
+This is a hacked version of the nginx-ingress chart, with the following modifications:
+
+ * Hard-code the TCP map
+
+---
+
 # nginx-ingress
 
 [nginx-ingress](https://github.com/kubernetes/ingress-nginx) is an Ingress controller that uses ConfigMap to store the nginx configuration.

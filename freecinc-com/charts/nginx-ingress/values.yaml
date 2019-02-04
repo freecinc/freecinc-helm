@@ -374,12 +374,6 @@ serviceAccount:
 imagePullSecrets: []
 # - name: secretName
 
-# TCP service key:value pairs
-# Ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
-##
-tcp: {}
-#  8080: "default/example-tcp-svc:9000"
-
 # UDP service key:value pairs
 # Ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/udp
 ##

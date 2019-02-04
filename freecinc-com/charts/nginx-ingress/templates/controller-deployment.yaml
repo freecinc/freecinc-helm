@@ -64,9 +64,7 @@ spec:
           {{- else }}
             - --nginx-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.controller.fullname" . }}
           {{- end }}
-          {{- if .Values.tcp }}
             - --tcp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-tcp
-          {{- end }}
           {{- if .Values.udp }}
             - --udp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-udp
           {{- end }}
@@ -128,11 +126,9 @@ spec:
               protocol: TCP
             {{- end }}
           {{- end }}
-          {{- range $key, $value := .Values.tcp }}
-            - name: "{{ $key }}-tcp"
-              containerPort: {{ $key }}
+            - name: "53589-tcp"
+              containerPort: 53589
               protocol: TCP
-          {{- end }}
           {{- range $key, $value := .Values.udp }}
             - name: "{{ $key }}-udp"
               containerPort: {{ $key }}

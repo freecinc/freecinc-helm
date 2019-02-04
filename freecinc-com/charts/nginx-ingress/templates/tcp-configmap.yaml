@@ -1,4 +1,3 @@
-{{- if .Values.tcp }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,5 +9,4 @@ metadata:
     release: {{ .Release.Name }}
   name: {{ template "nginx-ingress.fullname" . }}-tcp
 data:
-{{ toYaml .Values.tcp | indent 2 }}
-{{- end }}
+  53589: default/{{ .Release.Name }}-freecinc-com-backend:53589
