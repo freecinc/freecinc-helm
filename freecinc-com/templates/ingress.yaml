@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "freecinc-com.fullname" . }}
+  annotations:
+    app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
+    helm.sh/chart: {{ include "freecinc-com.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    ingress.class: nginx
+spec:
+  # this specifies the http backend; the taskd forwarding is in nginx-ingress.tcp in values.yaml.
+  backend:
+    serviceName: {{ include "freecinc-com.fullname" . }}-backend
+    servicePort: 80

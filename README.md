@@ -2,6 +2,15 @@
 
 A [Helm](https://helm.sh/) chart for deploying the FreeCinc service.
 
+## Apologies
+
+This was an experiment with Helm.
+The findings in this experiment: Helm is junk.
+It can't actually update resources, and will often "succeed" (meaning fail with the usual errors) without actually updating anything.
+It's really no better than just running `kubectl apply -f ..` in a loop -- in fact, it's much worse for making promises to do more and failing.
+
+This project will probably transition to a simple set of YAML files at some point, but until then we're stuck with Helm.
+
 ## Requirements
 
 * A Kubernetes cluster, all set up and available to `kubectl`
@@ -48,6 +57,12 @@ The Helm chart will refer to this secret, but not modify it.
 
 ### Helm Run
 
+First, setup dependencies:
+
+```shell
+$ helm dependency update
+```
+
 To create the release:
 
 ```shell
@@ -60,7 +75,15 @@ To later upgrade it:
 $ helm upgrade RELEASE ./freecinc-com
 ```
 
-..and to delete it:
+or if that doesn't work (Helm fails a lot)
+
+```shell
+$ helm install --set hostname=HOSTNAME --replace --name RELEASE ./freecinc-com
+```
+
+If this fails to update a resource, one way to force things is to delete the resource with kubectl and re-run one of the above commands.
+
+To delete it the release (noting that this may fail to delete stuff):
 
 ```shell
 $ helm del RELEASE

@@ -7,3 +7,12 @@ taskdImage:
   repository: djmitche/freecinc-taskd
   tag: 9f05c1b
   pullPolicy: IfNotPresent
+
+nginx-ingress:
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+  # forward the taskd port
+  tcp:
+    53589: default/dev-freecinc-com-backend:53589
