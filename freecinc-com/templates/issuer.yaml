@@ -1,0 +1,17 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: {{ include "freecinc-com.fullname" . }}
+  annotations:
+    app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
+    helm.sh/chart: {{ include "freecinc-com.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  acme:
+    email: {{ .Values.certContactEmail }}
+    http01: {}
+    privateKeySecretRef:
+      key: ""
+      name: {{ include "freecinc-com.fullname" . }}-privkey
+    server: https://acme-v02.api.letsencrypt.org/directory

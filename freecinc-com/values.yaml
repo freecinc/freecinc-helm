@@ -8,6 +8,9 @@ taskdImage:
   tag: 9f05c1b
   pullPolicy: IfNotPresent
 
+# the contact email for certificate issuance
+certContactEmail: nobody@v.igoro.us
+
 nginx-ingress:
   rbac:
     create: true
