@@ -25,6 +25,13 @@ Choose an appropriate name for the release (e.g., `staging`), called RELEASE her
 You'll also need to supply the hostname for the service (HOSTNAME).
 In order to get a TLS secret, it is up to you to configure DNS to map this hostname to the load balancer's public IP.
 
+### Cert-Manager
+
+Install [cert-manager](https://cert-manager.readthedocs.io/en/latest/getting-started/install.html#installing-with-helm) in the Kubernetes environment before installing FreeCinc.
+Verify that installation before proceeding.
+
+This Helm chart will create its own Issuer, so there is no need to do so manually.
+
 ### Secrets
 
 In a working copy of this repository, with Kubernetes set up, first create the required secrets.
@@ -66,7 +73,7 @@ $ helm dependency update
 To create the release:
 
 ```shell
-$ helm install --set hostname=HOSTNAME --name RELEASE ./freecinc-com
+$ helm install --set hostname=HOSTNAME --set certContactEmail=you@youremail.com --name RELEASE ./freecinc-com
 ```
 
 To later upgrade it:
@@ -78,7 +85,7 @@ $ helm upgrade RELEASE ./freecinc-com
 or if that doesn't work (Helm fails a lot)
 
 ```shell
-$ helm install --set hostname=HOSTNAME --replace --name RELEASE ./freecinc-com
+$ helm install --set hostname=HOSTNAME --set certContactEmail=you@youremail.com --replace --name RELEASE ./freecinc-com
 ```
 
 If this fails to update a resource, one way to force things is to delete the resource with kubectl and re-run one of the above commands.
@@ -91,6 +98,12 @@ $ helm del RELEASE
 
 *NOTE*: To avoid data loss, deleting a release does not delete the underlying persistent volumes.
 Delete those manually in the "Storage" tab in GKE or via `kubectl`.
+
+### DNS
+
+Once this is complete and everything has "settled", get your release's IP as described in the notes.
+Add that to the DNS for HOSTNAME, and wait a few minutes for cert-manager to get a certificate.
+With that, `https://HOSTNAME` should show the FreeCinc website!
 
 ## Operation
 

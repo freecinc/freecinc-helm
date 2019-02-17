@@ -7,9 +7,18 @@ metadata:
     helm.sh/chart: {{ include "freecinc-com.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    certmanager.k8s.io/issuer: {{ include "freecinc-com.fullname" . }}
     ingress.class: nginx
 spec:
-  # this specifies the http backend; the taskd forwarding is in nginx-ingress.tcp in values.yaml.
-  backend:
-    serviceName: {{ include "freecinc-com.fullname" . }}-backend
-    servicePort: 80
+  rules: 
+  - host: {{ .Values.hostname }}
+    http:
+      paths:
+      - backend: 
+          # this specifies the http backend; the taskd forwarding is in nginx-ingress.tcp in values.yaml.
+          serviceName: {{ include "freecinc-com.fullname" . }}-backend
+          servicePort: 80
+  tls: # < placing a host in the TLS config will indicate a cert should be created
+  - hosts:
+    - {{ .Values.hostname }}
+    secretName: {{ include "freecinc-com.fullname" . }}-tls
