@@ -1,6 +1,6 @@
 # freecinc-helm
 
-A [Helm](https://helm.sh/) chart for deploying the FreeCinc service.
+A [Helm](https://helm.sh/) (uuugh) chart for deploying the FreeCinc service.
 
 ## Apologies
 
