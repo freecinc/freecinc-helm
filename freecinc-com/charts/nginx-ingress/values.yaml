@@ -134,12 +134,9 @@ controller:
   minAvailable: 1
 
   resources:
-    limits:
-      cpu: 100m
-      memory: 64Mi
     requests:
       cpu: 50m
-      memory: 64Mi
+      memory: 128Mi
 
   autoscaling:
     enabled: false
