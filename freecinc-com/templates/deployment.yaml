@@ -71,6 +71,11 @@ spec:
             httpGet:
               path: /
               port: http
+          resources:
+            limits:
+              cpu: 100m
+            requests:
+              cpu: 50m
         - name: freecinc-taskd
           image: "{{ .Values.taskdImage.repository }}:{{ .Values.taskdImage.tag }}"
           imagePullPolicy: {{ .Values.taskdImage.pullPolicy }}
@@ -98,3 +103,8 @@ spec:
               port: taskd
             initialDelaySeconds: 2
             periodSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+            requests:
+              cpu: 50m
