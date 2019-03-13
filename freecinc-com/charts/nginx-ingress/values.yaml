@@ -41,10 +41,6 @@ controller:
   ##
   electionID: ingress-controller-leader
 
-  ## Name of the ingress class to route through this controller
-  ##
-  ingressClass: nginx
-
   # labels to add to the pod container metadata
   podLabels: {}
   #  key: value
@@ -138,12 +134,9 @@ controller:
   minAvailable: 1
 
   resources:
-    limits:
-      cpu: 100m
-      memory: 64Mi
     requests:
       cpu: 50m
-      memory: 64Mi
+      memory: 128Mi
 
   autoscaling:
     enabled: false
