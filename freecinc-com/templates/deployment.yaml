@@ -61,6 +61,10 @@ spec:
                   key: salt
             - name: PUBLIC_HOSTNAME
               value: {{ required "hostname value must be given" .Values.hostname }}
+{{- if eq .Release.Name "prod" }}
+            - name: RACK_ENV
+              value: production
+{{- end }}
           ports:
             - name: http
               containerPort: 80
