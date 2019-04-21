@@ -80,8 +80,10 @@ spec:
           resources:
             limits:
               cpu: 100m
+              memory: 400Mi
             requests:
-              cpu: 50m
+              cpu: 10m
+              memory: 100Mi
         - name: freecinc-taskd
           image: "{{ .Values.taskdImage.repository }}:{{ .Values.taskdImage.tag }}"
           imagePullPolicy: {{ .Values.taskdImage.pullPolicy }}
@@ -112,5 +114,7 @@ spec:
           resources:
             limits:
               cpu: 100m
+              memory: 1000Mi
             requests:
               cpu: 50m
+              memory: 100Mi
