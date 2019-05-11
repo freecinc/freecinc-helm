@@ -104,8 +104,8 @@ spec:
           livenessProbe:
             tcpSocket:
               port: taskd
-            initialDelaySeconds: 15
-            periodSeconds: 30
+            initialDelaySeconds: 60
+            periodSeconds: 300
           readinessProbe:
             tcpSocket:
               port: taskd
