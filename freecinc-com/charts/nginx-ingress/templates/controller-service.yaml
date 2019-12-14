@@ -59,17 +59,10 @@ spec:
       nodePort: {{ .Values.controller.service.nodePorts.https }}
       {{- end }}
     {{- end }}
-  {{- range $key, $value := .Values.tcp }}
-    - name: "{{ $key }}-tcp"
-      port: {{ $key }}
+    - name: "53589-tcp"
+      port: 53589
       protocol: TCP
-      targetPort: "{{ $key }}-tcp"
-     {{- if $.Values.controller.service.nodePorts.tcp }}
-      {{- if index $.Values.controller.service.nodePorts.tcp $key }}
-      nodePort: {{ index $.Values.controller.service.nodePorts.tcp $key }}
-      {{- end }}
-     {{- end }}
-  {{- end }}
+      targetPort: "53589-tcp"
   {{- range $key, $value := .Values.udp }}
     - name: "{{ $key }}-udp"
       port: {{ $key }}
