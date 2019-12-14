@@ -7,7 +7,7 @@ metadata:
     helm.sh/chart: {{ include "freecinc-com.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    certmanager.k8s.io/issuer: {{ include "freecinc-com.fullname" . }}
+    cert-manager.io/issuer: {{ include "freecinc-com.fullname" . }}
     kubernetes.io/ingress.class: nginx-{{ .Release.Name }}
 spec:
   rules: 
