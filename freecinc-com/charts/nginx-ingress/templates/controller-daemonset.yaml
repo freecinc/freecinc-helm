@@ -66,7 +66,7 @@ spec:
             - --election-id={{ .Values.controller.electionID }}
           {{- end }}
           {{- if (semverCompare ">=0.9.0-beta.1" .Values.controller.image.tag) }}
-            - --ingress-class={{ .Values.controller.ingressClass }}
+            - --ingress-class=nginx-{{ .Release.Name }}
           {{- end }}
           {{- if (semverCompare ">=0.9.0-beta.1" .Values.controller.image.tag) }}
             - --configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.controller.fullname" . }}

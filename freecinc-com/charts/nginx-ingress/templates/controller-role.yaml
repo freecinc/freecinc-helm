@@ -56,7 +56,7 @@ rules:
     resources:
       - configmaps
     resourceNames:
-      - {{ .Values.controller.electionID }}-{{ .Values.controller.ingressClass }}
+      - {{ .Values.controller.electionID }}-nginx-{{ .Release.Name }}
     verbs:
       - get
       - update
