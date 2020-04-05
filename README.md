@@ -86,14 +86,11 @@ $ helm install --set hostname=HOSTNAME --set certContactEmail=you@youremail.com 
 
 If this fails to update a resource, one way to force things is to delete the resource with kubectl and re-run one of the above commands.
 
-To delete it the release (noting that this may fail to delete stuff):
+To delete it the release (*including persistent volumes*, and noting that this is not Helm's strong point):
 
 ```shell
 $ helm del RELEASE
 ```
-
-*NOTE*: To avoid data loss, deleting a release does not delete the underlying persistent volumes.
-Delete those manually in the "Storage" tab in GKE or via `kubectl`.
 
 ### DNS
 
