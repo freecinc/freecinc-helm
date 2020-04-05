@@ -14,15 +14,14 @@ This project will probably transition to a simple set of YAML files at some poin
 ## Requirements
 
 * A Kubernetes cluster, all set up and available to `kubectl`
-* Tiller installed in that cluster
-* Helm client
+* A local install of Helm 3
 
 ## Installation
 
 The Helm run will create a "release" from the `./freecinc-com` chart.
 Choose an appropriate name for the release (e.g., `staging`), called RELEASE here.
 
-You'll also need to supply the hostname for the service (HOSTNAME).
+You'll also need to supply the hostname for the service (HOSTNAME) and a contact email (EMAIL) for the cert for this hostname.
 In order to get a TLS secret, it is up to you to configure DNS to map this hostname to the load balancer's public IP.
 
 ### Cert-Manager
@@ -46,6 +45,9 @@ Create or gather the following files in a secure location:
 * `ca.cert.pem`
 * `ca.key.pem`
 
+**NOTE**: you will want to ensure that the certificates have a lifetime greater
+than the default (1 year) as there is no way to rotate them.
+
 Then, create a secret named `RELEASE-secrets`:
 
 ```shell
@@ -64,16 +66,10 @@ The Helm chart will refer to this secret, but not modify it.
 
 ### Helm Run
 
-First, setup dependencies:
-
-```shell
-$ helm dependency update
-```
-
 To create the release:
 
 ```shell
-$ helm install --set hostname=HOSTNAME --set certContactEmail=you@youremail.com --name RELEASE ./freecinc-com
+$ helm install RELEASE --set hostname=HOSTNAME --set certContactEmail=EMAIL ./freecinc-com
 ```
 
 To later upgrade it:
@@ -105,7 +101,22 @@ Once this is complete and everything has "settled", get your release's IP as des
 Add that to the DNS for HOSTNAME, and wait a few minutes for cert-manager to get a certificate.
 With that, `https://HOSTNAME` should show the FreeCinc website!
 
-## Operation
+## System Operations
+
+The easiest way to back up the persistent volumes is to use `kubectl exec` on a running pod.
+Get the pod name in POD and then
+
+```shell
+$ kubectl exec $POD -c freecinc-web --  tar -C / -cvf - /taskddata /pki > backup.tar
+```
+
+Similarly, to restore (noting that this will not remove other files that might exist):
+
+```shell
+$ kubectl exec -i $POD -c freecinc-web --  tar -C / -xvf - < backup.tar
+```
+
+## Design
 
 This runs a single deployment containing a pod with two containers: one to run [freecinc-taskd](https://github.com/freecinc/freecinc-taskd) and one for the [web frontend](https://github.com/freecinc/freecinc-web).
 
