@@ -5,7 +5,7 @@ webImage:
 
 taskdImage:
   repository: djmitche/freecinc-taskd
-  tag: 9f05c1b
+  tag: d3c62b0
   pullPolicy: IfNotPresent
 
 # the contact email for certificate issuance
