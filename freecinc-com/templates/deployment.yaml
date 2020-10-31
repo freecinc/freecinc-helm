@@ -101,16 +101,20 @@ spec:
             - name: taskd
               containerPort: 53589
               protocol: TCP
+          # taskd is single-threaded, so we wait a *long* time (15m) before marking this as unready or
+          # not alive, and prefer liveness since there's only one pod at a time
           livenessProbe:
             tcpSocket:
               port: taskd
             initialDelaySeconds: 60
             periodSeconds: 300
+            failureThreshold: 3
           readinessProbe:
             tcpSocket:
               port: taskd
             initialDelaySeconds: 2
-            periodSeconds: 1
+            periodSeconds: 30
+            failureThreshold: 32
           resources:
             limits:
               cpu: 100m
