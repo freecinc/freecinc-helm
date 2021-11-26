@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "freecinc-com.fullname" . }}
   labels:
@@ -13,11 +13,30 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-  # Because the pods share a volume and that volume can only be mounted
-  # on a single node, it is not possible to do a rolling update if the
-  # new revision is scheduled on a different node.  So we recreate..
-  strategy:
-    type: Recreate
+  serviceName: {{ include "freecinc-com.fullname" . }}-headless
+  volumeClaimTemplates:
+    - metadata:
+        name: taskddata
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 10Gi
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: {{ .Release.Name }}-taskdata
+            app.kubernetes.io/instance: {{ .Release.Name }}
+    - metadata:
+        name: pki
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources:
+          requests:
+            storage: 1Gi
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: {{ .Release.Name }}-pki
+            app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
@@ -25,12 +44,6 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       volumes:
-        - name: taskddata
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-taskddata
-        - name: pki
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-pki
         - name: secrets
           secret:
             secretName: {{ .Release.Name }}-secrets
