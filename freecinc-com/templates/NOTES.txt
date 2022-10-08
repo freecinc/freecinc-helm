@@ -2,9 +2,7 @@ NOTES
 -----
 
 Hostname: {{ .Values.hostname }}
-Contact Email: {{ .Values.certContactEmail }}
 
 To get the IP for this Helm release, run
-  kubectl get svc --namespace default {{ .Release.Name }}-nginx-ingress-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+    kubectl get ingress --namespace default {{ .Release.Name }}-freecinc-com -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
-Set this up in DNS as described in the README.

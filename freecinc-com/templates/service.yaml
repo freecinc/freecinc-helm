@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "freecinc-com.fullname" . }}-backend
+  name: {{ include "freecinc-com.fullname" . }}-extservice
   labels:
     app.kubernetes.io/name: {{ include "freecinc-com.name" . }}
     helm.sh/chart: {{ include "freecinc-com.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: http
       port: 80

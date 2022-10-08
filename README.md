@@ -9,11 +9,18 @@ The findings in this experiment: Helm is junk.
 It can't actually update resources, and will often "succeed" (meaning fail with the usual errors) without actually updating anything.
 It's really no better than just running `kubectl apply -f ..` in a loop -- in fact, it's much worse for making promises to do more and failing.
 
-This project will probably transition to a simple set of YAML files at some point, but until then we're stuck with Helm.
+Kubernetes is really not an appropriate tool for a service of this tiny size.
+In fact, this could be deployed easily in Heroku or the like if taskd used a "normal" HTTP termination.
+However, it relies on client TLS certificates, in a way that prevents use of proxies or HTTP load balancers.
+
+In order to reduce complexity and limit cost, the current deployment uses a simple TCP load balancer for all traffic, including the freecinc-web traffic.
+That precludes use of TLS for that web traffic, meaning that we are serving new keys over HTTP.
+That's OK, though -- the entire taskd protocol is insecure.
 
 ## Requirements
 
-* A Kubernetes cluster, all set up and available to `kubectl`
+* A GKE Kubernetes cluster, all set up and available to `kubectl`
+    * GKE is used to get a built-in ingress controller and cert management
 * A local install of Helm 3
 
 ## Installation
@@ -21,15 +28,7 @@ This project will probably transition to a simple set of YAML files at some poin
 The Helm run will create a "release" from the `./freecinc-com` chart.
 Choose an appropriate name for the release (e.g., `staging`), called RELEASE here.
 
-You'll also need to supply the hostname for the service (HOSTNAME) and a contact email (EMAIL) for the cert for this hostname.
-In order to get a TLS secret, it is up to you to configure DNS to map this hostname to the load balancer's public IP.
-
-### Cert-Manager
-
-Install [cert-manager](https://cert-manager.readthedocs.io/en/latest/getting-started/install.html#installing-with-helm) in the Kubernetes environment before installing FreeCinc.
-Verify that installation before proceeding.
-
-This Helm chart will create its own Issuer, so there is no need to do so manually.
+You'll also need to supply the hostname for the service (HOSTNAME).
 
 ### Secrets
 
@@ -69,7 +68,7 @@ The Helm chart will refer to this secret, but not modify it.
 To create the release:
 
 ```shell
-$ helm install RELEASE --set hostname=HOSTNAME --set certContactEmail=EMAIL ./freecinc-com
+$ helm install RELEASE --set hostname=HOSTNAME ./freecinc-com
 ```
 
 To later upgrade it:
@@ -81,12 +80,12 @@ $ helm upgrade RELEASE ./freecinc-com
 or if that doesn't work (Helm fails a lot)
 
 ```shell
-$ helm install --set hostname=HOSTNAME --set certContactEmail=you@youremail.com --replace --name RELEASE ./freecinc-com
+$ helm install --set hostname=HOSTNAME --replace --name RELEASE ./freecinc-com
 ```
 
 If this fails to update a resource, one way to force things is to delete the resource with kubectl and re-run one of the above commands.
 
-To delete it the release (*including persistent volumes*, and noting that this is not Helm's strong point):
+To delete the release (*including persistent volumes*, and noting that this is not Helm's strong point):
 
 ```shell
 $ helm del RELEASE
@@ -95,7 +94,7 @@ $ helm del RELEASE
 ### DNS
 
 Once this is complete and everything has "settled", get your release's IP as described in the notes.
-Add that to the DNS for HOSTNAME, and wait a few minutes for cert-manager to get a certificate.
+Add that to the DNS for HOSTNAME, and wait for the [managed certificate](https://console.cloud.google.com/net-services/loadbalancing/advanced/sslCertificates/list) to provision.
 With that, `https://HOSTNAME` should show the FreeCinc website!
 
 ## System Operations
